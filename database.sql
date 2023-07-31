@@ -20,17 +20,18 @@ CREATE TABLE "pets" (
     "user_id" INT REFERENCES "user"
 );
 
+
 CREATE TABLE "tasks" (
 	"id" SERIAL PRIMARY KEY, 
 	"name" VARCHAR(80) NOT NULL,
 	"days_per_week" INTEGER(30), 
-	"monday" BOOLEAN, 
-    "tuesday" BOOLEAN,
-    "wednesday" BOOLEAN,
-    "thursday" BOOLEAN,
-    "friday" BOOLEAN,
-    "saturday" BOOLEAN,
-    "sunday" BOOLEAN, 
+	"monday" BOOLEAN DEFAULT FALSE, 
+    "tuesday" BOOLEAN DEFAULT FALSE,
+    "wednesday" BOOLEAN DEFAULT FALSE,
+    "thursday" BOOLEAN DEFAULT FALSE,
+    "friday" BOOLEAN DEFAULT FALSE,
+    "saturday" BOOLEAN DEFAULT FALSE,
+    "sunday" BOOLEAN DEFAULT FALSE, 
     "percent_complete" INTEGER(255),
     "week_id" INT REFERENCES "weeks"
 );
