@@ -1,7 +1,7 @@
 import {useState} from 'react';
 import LogOutButton from '../LogOutButton/LogOutButton';
 import { useSelector, useDispatch } from 'react-redux';
-import {Typography, Button, TableContainer, Box, Paper} from '@mui/material'
+import {Typography, TextField, Checkbox, Slider, Button, TableContainer, Box, Paper} from '@mui/material'
 import { DataGrid } from '@mui/x-data-grid';
 
 function UserPage() {
@@ -49,6 +49,37 @@ function UserPage() {
       <Button>Add Task</Button>
     </Box>
     
+      <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', padding: '16px' }}>
+        {/* Row 1: Text */}
+        <Paper sx={{ width: '100%', padding: '16px', marginBottom: '8px' }}>
+          <Typography variant="body1">Row 1: Text Input</Typography>
+          <TextField fullWidth label="Enter text" variant="outlined" />
+        </Paper>
+
+        {/* Row 2: Number */}
+        <Paper sx={{ width: '100%', padding: '16px', marginBottom: '8px' }}>
+          <Typography variant="body1">Row 2: Number Input</Typography>
+          <TextField fullWidth label="Enter a number" variant="outlined" type="number" />
+        </Paper>
+
+        {/* Rows 3-9: Checkboxes */}
+        {[3, 4, 5, 6, 7, 8, 9].map((row) => (
+          <Paper key={row} sx={{ width: '100%', padding: '16px', marginBottom: '8px' }}>
+            <Typography variant="body1">Row {row}: Checkbox</Typography>
+            <Checkbox />
+          </Paper>
+        ))}
+
+        {/* Row 10: Percentage */}
+        <Paper sx={{ width: '100%', padding: '16px', marginBottom: '8px' }}>
+          <Typography variant="body1">Row 10: Percentage</Typography>
+          <Slider
+            valueLabelDisplay="auto"
+            value={50}
+            aria-labelledby="input-slider"
+          />
+        </Paper>
+      </Box>
 
     </>
   );
