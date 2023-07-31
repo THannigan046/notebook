@@ -1,7 +1,7 @@
 import {useState} from 'react';
 import LogOutButton from '../LogOutButton/LogOutButton';
 import { useSelector, useDispatch } from 'react-redux';
-import {Typography, TextField, Checkbox, Slider, Button, TableContainer, Box, Paper} from '@mui/material'
+import {Typography, Modal, TextField, Checkbox, Slider, Button, TableContainer, Box, Paper} from '@mui/material'
 import { DataGrid } from '@mui/x-data-grid';
 
 function UserPage() {
@@ -19,6 +19,10 @@ function UserPage() {
       }
     })
   }
+
+  const [open, setOpen] = useState(false);
+  const handleOpen = () => setOpen(true);
+  const handleClose = () => setOpen(false);
 
   const columns = [
     { field: 'lastName', headerName: 'Last Name', minWidth: 130, flex: 0.8 },
@@ -46,40 +50,35 @@ function UserPage() {
     {/* click a button that opens a task modal */}  
     {/* datagrid of tasks (crud stuff) with checkboxes that all feeds to database*/}
     <Box display='flex' justifyContent='center' width='100%'>
-      <Button>Add Task</Button>
+      <Button onClick={handleOpen}>Add Task</Button>
     </Box>
-    
+
+    {/* TODO: center modal */}
+
+    <Modal open={open} onClose={handleClose}>
+      
       <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', padding: '16px' }}>
         {/* Row 1: Text */}
         <Paper sx={{ width: '100%', padding: '16px', marginBottom: '8px' }}>
-          <Typography variant="body1">Row 1: Text Input</Typography>
-          <TextField fullWidth label="Enter text" variant="outlined" />
+          {/* <Typography variant="body1">Row 1: Text Input</Typography> */}
+          <TextField fullWidth label="Task Name" variant="outlined" />
         </Paper>
 
         {/* Row 2: Number */}
         <Paper sx={{ width: '100%', padding: '16px', marginBottom: '8px' }}>
-          <Typography variant="body1">Row 2: Number Input</Typography>
-          <TextField fullWidth label="Enter a number" variant="outlined" type="number" />
+          {/* <Typography variant="body1">Row 2: Number Input</Typography> */}
+          <TextField fullWidth label="Days Per Week" variant="outlined" type="number" />
         </Paper>
 
-        {/* Rows 3-9: Checkboxes */}
-        {[3, 4, 5, 6, 7, 8, 9].map((row) => (
-          <Paper key={row} sx={{ width: '100%', padding: '16px', marginBottom: '8px' }}>
-            <Typography variant="body1">Row {row}: Checkbox</Typography>
-            <Checkbox />
+          <Paper sx={{ width: '100%', padding: '16px', marginBottom: '8px' }}>
+            {/* put a add task button here */}
+            <Box display='flex' justifyContent='center' width='100%'>
+              <Button variant="contained">Add Task</Button>
+            </Box>
           </Paper>
-        ))}
 
-        {/* Row 10: Percentage */}
-        <Paper sx={{ width: '100%', padding: '16px', marginBottom: '8px' }}>
-          <Typography variant="body1">Row 10: Percentage</Typography>
-          <Slider
-            valueLabelDisplay="auto"
-            value={50}
-            aria-labelledby="input-slider"
-          />
-        </Paper>
       </Box>
+    </Modal>
 
     </>
   );
