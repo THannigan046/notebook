@@ -1,7 +1,7 @@
 import {useState} from 'react';
 import LogOutButton from '../LogOutButton/LogOutButton';
 import { useSelector, useDispatch } from 'react-redux';
-import {Typography, TableContainer, Paper} from '@mui/material'
+import {Typography, Button, TableContainer, Box, Paper} from '@mui/material'
 import { DataGrid } from '@mui/x-data-grid';
 
 function UserPage() {
@@ -33,7 +33,7 @@ function UserPage() {
     { id: 1, lastName: 'Snow', firstName: 'Jon'},
   ]
 
-  // this component doesn't do much to start, just renders some user reducer info to the DOM
+
   const user = useSelector((store) => store.user);
   return (
     <>
@@ -45,18 +45,11 @@ function UserPage() {
     {/* Make a task */}
     {/* click a button that opens a task modal */}  
     {/* datagrid of tasks (crud stuff) with checkboxes that all feeds to database*/}
-      <TableContainer component={Paper}  >
-        {/* <div style={{ height: 400, width: '100%', alignContent: 'center' }}> */}
-          <DataGrid
-            sx={{ m: 2, boxShadow: 2 }}
-            aria-label="a dense table"
-            rows={dataGridRows}
-            columns={columns}
-            pageSize={5}
-            rowsPerPageOptions={[5]}
-          />
-        {/* </div> */}
-      </TableContainer>
+    <Box display='flex' justifyContent='center' width='100%'>
+      <Button>Add Task</Button>
+    </Box>
+    
+
     </>
   );
 }
