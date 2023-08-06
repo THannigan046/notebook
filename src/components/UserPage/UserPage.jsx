@@ -1,7 +1,7 @@
 import {useState} from 'react';
 import LogOutButton from '../LogOutButton/LogOutButton';
 import { useSelector, useDispatch } from 'react-redux';
-import {Typography, Modal, TextField, Checkbox, Slider, Button, TableContainer, Box, Paper} from '@mui/material'
+import {Typography, Modal, TextField, Backdrop, Checkbox, Slider, Button, TableContainer, Box, Paper} from '@mui/material'
 import { DataGrid } from '@mui/x-data-grid';
 
 function UserPage() {
@@ -10,7 +10,6 @@ function UserPage() {
   const [petName, setPetName] = useState('');
   const handleSubmit = (event) => {
     event.preventDefault();
-    console.log(petName)
 
     dispatch({
       type : 'ADD_PET',
@@ -21,10 +20,12 @@ function UserPage() {
   }
 
   const [open, setOpen] = useState(false);
+  const [taskName, setTaskName] = useState('');
+  const [daysPerWeek, setDaysPerWeek] = useState(0);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
 
-  const columns = [
+  /* const columns = [
     { field: 'lastName', headerName: 'Last Name', minWidth: 130, flex: 0.8 },
     { field: 'firstName', headerName: 'First Name', minWidth: 120, flex: 0.8 },
     { field: 'email', headerName: 'email', minWidth: 220, flex: 1 },
@@ -32,10 +33,10 @@ function UserPage() {
     { field: 'clientName', headerName: 'Client Name', minWidth: 130, flex: 0.8 },
 
   ]
-
+  
   const dataGridRows = [
     { id: 1, lastName: 'Snow', firstName: 'Jon'},
-  ]
+  ] */
 
 
   const user = useSelector((store) => store.user);
@@ -53,21 +54,20 @@ function UserPage() {
       <Button onClick={handleOpen}>Add Task</Button>
     </Box>
 
-    {/* TODO: center modal */}
-
-    <Modal open={open} onClose={handleClose}>
-      {/* center modal  */}   
-      <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', padding: '16px', justifyContent:'center', height: '100%', }}>
+      <Modal closeAfterTransition
+        BackdropComponent={Backdrop}
+        BackdropProps={{ onClick: handleClose }} open={open} onClose={handleClose}> 
+      <Box component='form' sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', padding: '16px', justifyContent:'center', height: '100%', }}>
         {/* Row 1: Text */}
         <Paper sx={{ width: '100%', padding: '16px', marginBottom: '8px' }}>
           {/* <Typography variant="body1">Row 1: Text Input</Typography> */}
-          <TextField fullWidth label="Task Name" variant="outlined" />
+          <TextField fullWidth label="Task Name" value={taskName} onChange={e => setTaskName(e.target.value)} variant="outlined" />
         </Paper>
 
         {/* Row 2: Number */}
         <Paper sx={{ width: '100%', padding: '16px', marginBottom: '8px' }}>
           {/* <Typography variant="body1">Row 2: Number Input</Typography> */}
-          <TextField fullWidth label="Days Per Week" variant="outlined" type="number" />
+          <TextField  value={daysPerWeek} onChange={e => setDaysPerWeek(e.target.value)} fullWidth label="Days Per Week" variant="outlined" type="number" />
         </Paper>
 
           <Paper sx={{ width: '100%', padding: '16px', marginBottom: '8px' }}>
