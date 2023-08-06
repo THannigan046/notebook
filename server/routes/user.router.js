@@ -14,6 +14,23 @@ router.get('/', rejectUnauthenticated, (req, res) => {
   res.send(req.user);
 });
 
+// TODO: add router.post for tasks
+router.post('/tasks',(req, res) => {
+  const taskName = req.body.taskName;
+  const daysPerWeek = req.body.daysPerWeek;
+
+  const queryText = `INSERT INTO "tasks" (name, days_per_week) VALUES ($1, $2) RETURNING id`;
+
+  pool.query(queryText, [taskName, daysPerWeek])
+  .then((result) => {
+    res.send(result.rows[0]);
+  })
+  .catch((err) => {
+    console.log('Tasks post request failed', err);
+    res.sendStatus(500);
+  })
+})
+
 // Handles POST request with new user data
 // The only thing different from this and every other post we've seen
 // is that the password gets encrypted before being inserted

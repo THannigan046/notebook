@@ -3,6 +3,7 @@ import LogOutButton from '../LogOutButton/LogOutButton';
 import { useSelector, useDispatch } from 'react-redux';
 import {Typography, Modal, TextField, Backdrop, Checkbox, Slider, Button, TableContainer, Box, Paper} from '@mui/material'
 import { DataGrid } from '@mui/x-data-grid';
+import axios from 'axios';
 
 function UserPage() {
 
@@ -10,13 +11,20 @@ function UserPage() {
   const [petName, setPetName] = useState('');
   const handleSubmit = (event) => {
     event.preventDefault();
+    if (daysPerWeek > 0 || daysPerWeek < 7) {
+      axios.post('/api/user/tasks', {
+        taskName: taskName, daysPerWeek: daysPerWeek
+      } )
 
-    dispatch({
+      handleClose();  
+    }
+    else (alert('Please enter a valid number of days per week'))
+    /* dispatch({
       type : 'ADD_PET',
       payload: {
         name : petName
       }
-    })
+    }) */
   }
 
   const [open, setOpen] = useState(false);
@@ -57,7 +65,7 @@ function UserPage() {
       <Modal closeAfterTransition
         BackdropComponent={Backdrop}
         BackdropProps={{ onClick: handleClose }} open={open} onClose={handleClose}> 
-      <Box component='form' sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', padding: '16px', justifyContent:'center', height: '100%', }}>
+      <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', padding: '16px', justifyContent:'center', height: '100%', }}>
         {/* Row 1: Text */}
         <Paper sx={{ width: '100%', padding: '16px', marginBottom: '8px' }}>
           {/* <Typography variant="body1">Row 1: Text Input</Typography> */}
@@ -72,7 +80,7 @@ function UserPage() {
 
           <Paper sx={{ width: '100%', padding: '16px', marginBottom: '8px' }}>
             <Box display='flex' justifyContent='center' width='100%'>
-              <Button variant="contained">Add Task</Button>
+              <Button onClick={handleSubmit} variant="contained">Add Task</Button>
             </Box>
           </Paper>
 
