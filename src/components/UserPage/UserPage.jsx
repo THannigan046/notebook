@@ -56,8 +56,8 @@ function UserPage() {
     {/* TODO: center modal */}
 
     <Modal open={open} onClose={handleClose}>
-      
-      <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', padding: '16px' }}>
+      {/* center modal  */}   
+      <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', padding: '16px', justifyContent:'center', height: '100%', }}>
         {/* Row 1: Text */}
         <Paper sx={{ width: '100%', padding: '16px', marginBottom: '8px' }}>
           {/* <Typography variant="body1">Row 1: Text Input</Typography> */}
@@ -71,7 +71,6 @@ function UserPage() {
         </Paper>
 
           <Paper sx={{ width: '100%', padding: '16px', marginBottom: '8px' }}>
-            {/* put a add task button here */}
             <Box display='flex' justifyContent='center' width='100%'>
               <Button variant="contained">Add Task</Button>
             </Box>
@@ -84,5 +83,4 @@ function UserPage() {
   );
 }
 
-// this allows us to use <App /> in index.js
 export default UserPage;
