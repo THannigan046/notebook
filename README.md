@@ -119,3 +119,33 @@ This code is also heavily commented. We recommend reading through the comments, 
 ## Update Documentation
 
 Customize this ReadMe and the code comments in this project to read less like a starter repo and more like a project. Here is an example: https://gist.github.com/PurpleBooth/109311bb0361f32d87a2
+
+
+```js
+const CalendarSection = () => {
+  return (
+    <Stack direction="row" spacing={1}>
+      <CalendarRow />
+      <CalendarRow />
+      <CalendarRow />
+    </Stack>
+  );
+};
+
+const CalendarRow = () => {
+  const dayName = 'Wednesday'; //whatever
+  const dayOfWeek = Date.now(); //or whatever
+  return (
+    <Stack
+      direction="column"
+      spacing={2}
+      onClick={() => {
+        //whatever
+      }}
+    >
+      <Typography variant="overline">{dayName}</Typography>
+      <Typography variant="body1">{dayOfWeek}</Typography>
+    </Stack>
+  );
+};
+```

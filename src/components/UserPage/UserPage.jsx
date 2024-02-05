@@ -11,6 +11,7 @@ import {
   Button,
   TableContainer,
   Box,
+  Stack,
   Paper,
   InputLabel,
   FormControl,
@@ -66,11 +67,7 @@ function UserPage() {
       <Typography variant="h2" component="h2" align="center">
         Welcome {user.username}
       </Typography>
-      {/* rename to weeks.jsx */}
-      {/* Back button to return to months page */}
-      {/* Make a task */}
-      {/* click a button that opens a task modal */}
-      {/* datagrid of tasks (crud stuff) with checkboxes that all feeds to database*/}
+      <CalendarSection />
       <Box display="flex" justifyContent="center" width="100%">
         <Button onClick={handleOpen}>Add Task</Button>
       </Box>
@@ -106,7 +103,7 @@ function UserPage() {
               variant="outlined"
             />
           </Paper>
-
+Ú
           {/* Row 2: Number */}
           <Paper sx={{ width: "100%", padding: "16px", marginBottom: "8px" }}>
             {/* <Typography variant="body1">Row 2: Number Input</Typography> */}
@@ -158,5 +155,42 @@ function UserPage() {
     </>
   );
 }
+
+const CalendarSection = () => {
+  return (
+    <Stack
+      direction="row"
+      justifyContent="space-evenly"
+      spacing={{ xs: 1, sm: 2 }}
+      useFlexGap
+      flexWrap="wrap"
+    >
+      <CalendarRow day={'Mon'} />
+      <CalendarRow day={'Tue'} /> 
+      <CalendarRow day={'Wed'} />
+      <CalendarRow day={'Thu'} />
+      <CalendarRow day={'Fri'} />
+      <CalendarRow day={'Sat'} />
+      <CalendarRow day={'Sun'} />
+    </Stack>
+  );
+};
+
+const CalendarRow = ({day}) => {
+  const dayName = "Wed"; //whatever
+  const dayOfWeek = Date.now(); //or whatever
+  return (
+    <Stack
+      direction="column"
+      spacing={2}
+      onClick={() => {
+        //whatever
+      }}
+    >
+      <Typography variant="overline">{day}</Typography>
+      {/* <Typography variant="body1">{dayOfWeek}</Typography> */}
+    </Stack>
+  );
+};
 
 export default UserPage;
