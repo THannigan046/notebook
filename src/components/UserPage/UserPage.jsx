@@ -158,12 +158,13 @@ function UserPage() {
 
 const CalendarSection = () => {
   return (
+    // TODO: center to width of nav bar
     <Stack
       direction="row"
       justifyContent="space-evenly"
-      spacing={{ xs: 1, sm: 2 }}
       useFlexGap
-      flexWrap="wrap"
+      flexWrap="nowrap"
+      margin="0 auto"
     >
       <CalendarRow day={'Mon'} />
       <CalendarRow day={'Tue'} /> 
@@ -177,17 +178,16 @@ const CalendarSection = () => {
 };
 
 const CalendarRow = ({day}) => {
-  const dayName = "Wed"; //whatever
   const dayOfWeek = Date.now(); //or whatever
   return (
     <Stack
       direction="column"
-      spacing={2}
+      spacing={1}
       onClick={() => {
         //whatever
       }}
     >
-      <Typography variant="overline">{day}</Typography>
+      <Button onClick={() => console.log(day)} size="small" variant="outlined">{day}</Button>
       {/* <Typography variant="body1">{dayOfWeek}</Typography> */}
     </Stack>
   );
