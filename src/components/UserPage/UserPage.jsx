@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import LogOutButton from "../LogOutButton/LogOutButton";
 import { useSelector, useDispatch } from "react-redux";
 import {
@@ -6,6 +6,7 @@ import {
   Modal,
   TextField,
   Backdrop,
+  Grid,
   Checkbox,
   Slider,
   Button,
@@ -22,24 +23,22 @@ import { DataGrid } from "@mui/x-data-grid";
 import axios from "axios";
 
 function UserPage() {
-  const MAX_LIMIT = 7;
-  const MIN_LIMIT = 1;
   const dispatch = useDispatch();
-  const [petName, setPetName] = useState("");
+
+  const user = useSelector((store) => store.user);
+  useEffect(() => {
+    axios.get(`/api/user/tasks/${user.id}`).then((response) => {
+      dispatch({ type: "SET_TASKS", payload: response.data });
+    });
+  }, []);
   const handleSubmit = (event) => {
     event.preventDefault();
-    axios.post("/api/user/tasks", {
+    axios.post(`/api/user/tasks/${user.id}`, {
       taskName: taskName,
       daysPerWeek: daysPerWeek,
     });
 
     handleClose();
-    /* dispatch({
-      type : 'ADD_PET',
-      payload: {
-        name : petName
-      }
-    }) */
   };
 
   const [open, setOpen] = useState(false);
@@ -48,28 +47,14 @@ function UserPage() {
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
 
-  /* const columns = [
-    { field: 'lastName', headerName: 'Last Name', minWidth: 130, flex: 0.8 },
-    { field: 'firstName', headerName: 'First Name', minWidth: 120, flex: 0.8 },
-    { field: 'email', headerName: 'email', minWidth: 220, flex: 1 },
-    { field: 'phoneNumber', headerName: 'Phone', minWidth: 130, flex: 0.8 },
-    { field: 'clientName', headerName: 'Client Name', minWidth: 130, flex: 0.8 },
-
-  ]
-  
-  const dataGridRows = [
-    { id: 1, lastName: 'Snow', firstName: 'Jon'},
-  ] */
-
-  const user = useSelector((store) => store.user);
   return (
     <>
       <Typography variant="h2" component="h2" align="center">
         Welcome {user.username}
       </Typography>
       <CalendarSection />
-      <Box display="flex" justifyContent="center" width="100%">
-        <Button onClick={handleOpen}>Add Task</Button>
+      <Box  display="flex" justifyContent="center" width="100%">
+        <Button sx={{ marginBottom: "20px" }} variant="outlined" onClick={handleOpen}>Add Task</Button>
       </Box>
 
       <Modal
@@ -103,7 +88,6 @@ function UserPage() {
               variant="outlined"
             />
           </Paper>
-Ú
           {/* Row 2: Number */}
           <Paper sx={{ width: "100%", padding: "16px", marginBottom: "8px" }}>
             {/* <Typography variant="body1">Row 2: Number Input</Typography> */}
@@ -142,6 +126,7 @@ function UserPage() {
               </NativeSelect>
             </FormControl>
           </Paper>
+          {/* TODO: add column stack that conditionally renders weekly tasks */}
 
           <Paper sx={{ width: "100%", padding: "16px", marginBottom: "8px" }}>
             <Box display="flex" justifyContent="center" width="100%">
@@ -164,6 +149,7 @@ const CalendarSection = () => {
       justifyContent="space-evenly"
       useFlexGap
       flexWrap="nowrap"
+      maxWidth={"70%"}
       margin="0 auto"
     >
       <CalendarRow day={'Mon'} />

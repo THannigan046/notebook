@@ -15,13 +15,15 @@ router.get('/', rejectUnauthenticated, (req, res) => {
 });
 
 // TODO: add router.post for tasks
-router.post('/tasks',(req, res) => {
+router.post('/tasks/:id',(req, res) => {
   const taskName = req.body.taskName;
   const daysPerWeek = req.body.daysPerWeek;
 
-  const queryText = `INSERT INTO "tasks" (name, days_per_week) VALUES ($1, $2) RETURNING id`;
+  const userId = req.params.id;
 
-  pool.query(queryText, [taskName, daysPerWeek])
+  const queryText = `INSERT INTO "tasks" (name, days_per_week, user_id) VALUES ($1, $2, $3) RETURNING id`;
+
+  pool.query(queryText, [taskName, daysPerWeek, userId])
   .then((result) => {
     res.send(result.rows[0]);
   })
@@ -29,6 +31,21 @@ router.post('/tasks',(req, res) => {
     console.log('Tasks post request failed', err);
     res.sendStatus(500);
   })
+})
+
+router.get('/tasks/:id', (req, res) => {
+  const id = req.params.id;
+
+  const queryText = `SELECT * FROM "tasks" WHERE "user_id" = $1`;
+  pool
+    .query(queryText, [id])
+    .then((result) => {
+      res.send(result.rows);
+    })
+    .catch((err) => {
+      console.log('Tasks get request failed', err);
+      res.sendStatus(500);
+    });
 })
 
 // Handles POST request with new user data
