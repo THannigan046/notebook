@@ -17,8 +17,8 @@ import {
   InputLabel,
   FormControl,
   NativeSelect,
-  Select, 
-  MenuItem
+  Select,
+  MenuItem,
 } from "@mui/material";
 import { NumericFormat } from "react-number-format";
 import { DataGrid } from "@mui/x-data-grid";
@@ -33,6 +33,7 @@ function UserPage() {
       dispatch({ type: "SET_TASKS", payload: response.data });
     });
   }, []);
+  // TODO: refresh tasks on post
   const handleSubmit = (event) => {
     event.preventDefault();
     axios.post(`/api/user/tasks/${user.id}`, {
@@ -59,7 +60,12 @@ function UserPage() {
   });
   const columns = [
     { field: "name", headerName: "Task Name", minWidth: 150, flex: 0.6 },
-    { field: "daysPerWeek", headerName: "Days Per Week", minWidth: 150, flex: 0.6 },
+    {
+      field: "daysPerWeek",
+      headerName: "Days Per Week",
+      minWidth: 150,
+      flex: 0.6,
+    },
   ];
 
   return (
@@ -158,23 +164,25 @@ function UserPage() {
             </Paper>
           </Box>
         </Modal>
-        <Grid item xs={12}>
-          {tasks && (
-            <Typography variant="h3" component="h3" align="center">
-              Tasks
-            </Typography>
-          )}
-        </Grid>
-        <Grid item xs={12}>
-        {/* TODO: configure datagrid to correspond w each day */}
-        <DataGrid
-          rows={dataGridRows}
-          columns={columns}
-          pageSize={3}
-          rowsPerPageOptions={[3]}
-          checkboxSelection
-        />
-        </Grid>
+        {tasks.length > 0 && (
+          <>
+            <Grid item xs={12}>
+              <Typography variant="h3" component="h3" align="center">
+                Tasks
+              </Typography>
+            </Grid>
+            <Grid item xs={12}>
+              {/* TODO: configure datagrid to correspond w each day */}
+              <DataGrid
+                rows={dataGridRows}
+                columns={columns}
+                pageSize={3}
+                rowsPerPageOptions={[3]}
+                checkboxSelection
+              />
+            </Grid>
+          </>
+        )}
       </Grid>
     </>
   );
@@ -191,18 +199,19 @@ const CalendarSection = () => {
       maxWidth={"70%"}
       margin="0 auto"
     >
-      <CalendarRow day={'Mon'} />
-      <CalendarRow day={'Tue'} /> 
-      <CalendarRow day={'Wed'} />
-      <CalendarRow day={'Thu'} />
-      <CalendarRow day={'Fri'} />
-      <CalendarRow day={'Sat'} />
-      <CalendarRow day={'Sun'} />
+      <CalendarRow day={"Mon"} />
+      <CalendarRow day={"Tue"} />
+      <CalendarRow day={"Wed"} />
+      <CalendarRow day={"Thu"} />
+      <CalendarRow day={"Fri"} />
+      <CalendarRow day={"Sat"} />
+      <CalendarRow day={"Sun"} />
     </Stack>
   );
 };
 
-const CalendarRow = ({day}) => {
+const CalendarRow = ({ day }) => {
+  const dispatch = useDispatch();
   const dayOfWeek = Date.now(); //or whatever
   return (
     <Stack
@@ -212,7 +221,9 @@ const CalendarRow = ({day}) => {
         //whatever
       }}
     >
-      <Button onClick={() => console.log(day)} size="small" variant="outlined">{day}</Button>
+      <Button onClick={() => dispatch({ type: 'SET_SELECTED_DAY', payload: day })} size="small" variant="outlined">
+        {day}
+      </Button>
       {/* <Typography variant="body1">{dayOfWeek}</Typography> */}
     </Stack>
   );

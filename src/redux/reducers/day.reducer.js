@@ -1,4 +1,4 @@
-const dayReducer = (state = [], action) => {
+const dayReducer = (state = '', action) => {
     switch (action.type) {
         case 'SET_SELECTED_DAY':
             return action.payload;
