@@ -17,6 +17,8 @@ import {
   InputLabel,
   FormControl,
   NativeSelect,
+  Select, 
+  MenuItem
 } from "@mui/material";
 import { NumericFormat } from "react-number-format";
 import { DataGrid } from "@mui/x-data-grid";
@@ -44,56 +46,76 @@ function UserPage() {
   const [open, setOpen] = useState(false);
   const [taskName, setTaskName] = useState("");
   const [daysPerWeek, setDaysPerWeek] = useState(0);
+  const tasks = useSelector((store) => store.tasks);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
 
+  const dataGridRows = tasks.map((task) => {
+    return {
+      id: task.id,
+      name: task.name,
+      daysPerWeek: task.days_per_week,
+    };
+  });
+  const columns = [
+    { field: "name", headerName: "Task Name", minWidth: 150, flex: 0.6 },
+    { field: "daysPerWeek", headerName: "Days Per Week", minWidth: 150, flex: 0.6 },
+  ];
+
   return (
     <>
-      <Typography variant="h2" component="h2" align="center">
-        Welcome {user.username}
-      </Typography>
-      <CalendarSection />
-      <Box  display="flex" justifyContent="center" width="100%">
-        <Button sx={{ marginBottom: "20px" }} variant="outlined" onClick={handleOpen}>Add Task</Button>
-      </Box>
+      <Grid container spacing={2}>
+        <Grid item xs={12}>
+          <Typography variant="h2" component="h2" align="center">
+            Welcome {user.username}
+          </Typography>
+        </Grid>
+        <Grid item xs={12}>
+          <CalendarSection />
+        </Grid>
+        <Grid item xs={12} sx={{ marginBottom: "20px" }}>
+          <Box display="flex" justifyContent="center" width="100%">
+            <Button onClick={handleOpen}>Add Task</Button>
+          </Box>
+        </Grid>
 
-      <Modal
-        closeAfterTransition
-        BackdropComponent={Backdrop}
-        BackdropProps={{ onClick: handleClose }}
-        open={open}
-        onClose={handleClose}
-      >
-        <Box
-          component="form"
-          onSubmit={handleSubmit}
-          sx={{
-            display: "flex",
-            flexDirection: "column",
-            alignItems: "center",
-            padding: "16px",
-            justifyContent: "center",
-            height: "100%",
-          }}
+        <Modal
+          closeAfterTransition
+          BackdropComponent={Backdrop}
+          BackdropProps={{ onClick: handleClose }}
+          open={open}
+          onClose={handleClose}
         >
-          {/* Row 1: Text */}
-          <Paper sx={{ width: "100%", padding: "16px", marginBottom: "8px" }}>
-            {/* <Typography variant="body1">Row 1: Text Input</Typography> */}
-            <TextField
-              fullWidth
-              label="Task Name"
-              value={taskName}
-              required
-              onChange={(e) => setTaskName(e.target.value)}
-              variant="outlined"
-            />
-          </Paper>
-          {/* Row 2: Number */}
-          <Paper sx={{ width: "100%", padding: "16px", marginBottom: "8px" }}>
-            {/* <Typography variant="body1">Row 2: Number Input</Typography> */}
+          <Box
+            component="form"
+            onSubmit={handleSubmit}
+            sx={{
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+              padding: "16px",
+              justifyContent: "center",
+              height: "100%",
+            }}
+          >
+            {/* Row 1: Text */}
+            <Paper sx={{ width: "100%", padding: "16px", marginBottom: "8px" }}>
+              {/* <Typography variant="body1">Row 1: Text Input</Typography> */}
+              <TextField
+                fullWidth
+                label="Task Name"
+                value={taskName}
+                required
+                onChange={(e) => setTaskName(e.target.value)}
+                variant="outlined"
+              />
+            </Paper>
+            {/* Row 2: Number */}
+            <Paper sx={{ width: "100%", padding: "16px", marginBottom: "8px" }}>
+              {/* <Typography variant="body1">Row 2: Number Input</Typography> */}
 
-            {/* TODO: limit days per week between 1 and 7 */}
-            {/* <TextField
+              {/* TODO: limit days per week between 1 and 7 */}
+              {/* <TextField
               value={daysPerWeek}
               inputProps={{ inputMode: "numeric", pattern: "[1-7]*" }}
               onChange={(e) => setDaysPerWeek(e.target.value)}
@@ -102,41 +124,58 @@ function UserPage() {
               variant="outlined"
               type="number"
             /> */}
-            <FormControl fullWidth>
-              <InputLabel variant="standard" htmlFor="uncontrolled-native">
-                Days Per Week
-              </InputLabel>
-              <NativeSelect
-                value={daysPerWeek}
-                onChange={(e) => setDaysPerWeek(e.target.value)}
-                defaultValue={1}
-                required
-                inputProps={{
-                  name: "daysPerWeek",
-                  id: "uncontrolled-native",
-                }}
-              >
-                <option value={1}>1</option>
-                <option value={2}>2</option>
-                <option value={3}>3</option>
-                <option value={4}>4</option>
-                <option value={5}>5</option>
-                <option value={6}>6</option>
-                <option value={7}>7</option>
-              </NativeSelect>
-            </FormControl>
-          </Paper>
-          {/* TODO: add column stack that conditionally renders weekly tasks */}
-
-          <Paper sx={{ width: "100%", padding: "16px", marginBottom: "8px" }}>
-            <Box display="flex" justifyContent="center" width="100%">
-              <Button type="submit" variant="contained">
-                Add Task
-              </Button>
-            </Box>
-          </Paper>
-        </Box>
-      </Modal>
+              <FormControl fullWidth>
+                <InputLabel variant="standard" htmlFor="uncontrolled-native">
+                  Days Per Week
+                </InputLabel>
+                <Select
+                  value={daysPerWeek}
+                  onChange={(e) => setDaysPerWeek(e.target.value)}
+                  defaultValue={1}
+                  required
+                  inputProps={{
+                    name: "daysPerWeek",
+                    id: "uncontrolled-native",
+                  }}
+                >
+                  <MenuItem value={1}>1</MenuItem>
+                  <MenuItem value={2}>2</MenuItem>
+                  <MenuItem value={3}>3</MenuItem>
+                  <MenuItem value={4}>4</MenuItem>
+                  <MenuItem value={5}>5</MenuItem>
+                  <MenuItem value={6}>6</MenuItem>
+                  <MenuItem value={7}>7</MenuItem>
+                </Select>
+              </FormControl>
+            </Paper>
+            {/* TODO: add column stack that conditionally renders weekly tasks */}
+            <Paper sx={{ width: "100%", padding: "16px", marginBottom: "8px" }}>
+              <Box display="flex" justifyContent="center" width="100%">
+                <Button type="submit" variant="contained">
+                  Add Task
+                </Button>
+              </Box>
+            </Paper>
+          </Box>
+        </Modal>
+        <Grid item xs={12}>
+          {tasks && (
+            <Typography variant="h3" component="h3" align="center">
+              Tasks
+            </Typography>
+          )}
+        </Grid>
+        <Grid item xs={12}>
+        {/* TODO: configure datagrid to correspond w each day */}
+        <DataGrid
+          rows={dataGridRows}
+          columns={columns}
+          pageSize={3}
+          rowsPerPageOptions={[3]}
+          checkboxSelection
+        />
+        </Grid>
+      </Grid>
     </>
   );
 }
