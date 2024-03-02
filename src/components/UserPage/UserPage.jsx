@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import LogOutButton from "../LogOutButton/LogOutButton";
 import { useSelector, useDispatch } from "react-redux";
+import swal from 'sweetalert';
 import {
   Typography,
   Modal,
