@@ -33,6 +33,20 @@ router.post('/tasks/:id',(req, res) => {
   })
 })
 
+router.put(`/tasks/:id`, (req, res) => {
+  const id = req.params.id;
+  const queryText = `UPDATE "tasks" SET "selected_day" = $1 WHERE "user_id" = $2 RETURNING *`;
+  pool
+    .query(queryText, [req.body.selectedDay, id])
+    .then((result) => {
+      res.send(result.rows[0]);
+    })
+    .catch((err) => {
+      console.log('Tasks put request failed', err);
+      res.sendStatus(500);
+    });
+})
+
 router.get('/tasks/:id', (req, res) => {
   const id = req.params.id;
 

@@ -173,13 +173,13 @@ const CalendarSection = () => {
       maxWidth={"70%"}
       margin="0 auto"
     >
-      <CalendarRow day={"Mon"} />
-      <CalendarRow day={"Tue"} />
-      <CalendarRow day={"Wed"} />
-      <CalendarRow day={"Thu"} />
-      <CalendarRow day={"Fri"} />
-      <CalendarRow day={"Sat"} />
-      <CalendarRow day={"Sun"} />
+      <CalendarRow day={"Mon"} dayToSend={"monday"}/>
+      <CalendarRow day={"Tue"} dayToSend={"tuesday"}/>
+      <CalendarRow day={"Wed"} dayToSend={"wednesday"}/>
+      <CalendarRow day={"Thu"} dayToSend={"thursday"} />
+      <CalendarRow day={"Fri"} dayToSend={"friday"} />
+      <CalendarRow day={"Sat"} dayToSend={"saturday"} />
+      <CalendarRow day={"Sun"} dayToSend={"sunday"} />
     </Stack>
   );
 };
@@ -232,7 +232,7 @@ const TaskGrid = () => {
   );
 };
 
-const CalendarRow = ({ day }) => {
+const CalendarRow = ({ day, dayToSend }) => {
   const dispatch = useDispatch();
   const dayOfWeek = Date.now(); //or whatever
   return (
@@ -243,7 +243,7 @@ const CalendarRow = ({ day }) => {
         //whatever
       }}
     >
-      <Button onClick={() => dispatch({ type: 'SET_SELECTED_DAY', payload: day })} size="small" variant="outlined">
+      <Button onClick={() => dispatch({ type: 'SET_SELECTED_DAY', payload: dayToSend })} size="small" variant="outlined">
         {day}
       </Button>
       {/* <Typography variant="body1">{dayOfWeek}</Typography> */}
