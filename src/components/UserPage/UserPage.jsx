@@ -28,11 +28,14 @@ import axios from "axios";
 function UserPage() {
   const dispatch = useDispatch();
 
+  const getTasks = () => {
+    axios.get(`/api/user/tasks/${user.id}`).then((response) => {
+    dispatch({ type: "SET_TASKS", payload: response.data });
+  });};
+
   const user = useSelector((store) => store.user);
   useEffect(() => {
-    axios.get(`/api/user/tasks/${user.id}`).then((response) => {
-      dispatch({ type: "SET_TASKS", payload: response.data });
-    });
+    getTasks();
   }, []);
   // TODO: refresh tasks on post
   const handleSubmit = (event) => {
@@ -41,8 +44,7 @@ function UserPage() {
       taskName: taskName,
       daysPerWeek: daysPerWeek,
     }).then((response) => {
-      dispatch({ type: "SET_TASKS", payload: response.data });
-      console.log('post successful', response.data);
+      getTasks();
     })
 
     handleClose();
@@ -54,23 +56,6 @@ function UserPage() {
   const tasks = useSelector((store) => store.tasks);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
-
-  const dataGridRows = tasks.map((task) => {
-    return {
-      id: task.id,
-      name: task.name,
-      daysPerWeek: task.days_per_week,
-    };
-  });
-  const columns = [
-    { field: "name", headerName: "Task Name", minWidth: 150, flex: 0.6 },
-    {
-      field: "daysPerWeek",
-      headerName: "DPW",
-      minWidth: 150,
-      flex: 0.6,
-    },
-  ];
 
   return (
     <>
@@ -122,18 +107,7 @@ function UserPage() {
             </Paper>
             {/* Row 2: Number */}
             <Paper sx={{ width: "100%", padding: "16px", marginBottom: "8px" }}>
-              {/* <Typography variant="body1">Row 2: Number Input</Typography> */}
 
-              {/* TODO: limit days per week between 1 and 7 */}
-              {/* <TextField
-              value={daysPerWeek}
-              inputProps={{ inputMode: "numeric", pattern: "[1-7]*" }}
-              onChange={(e) => setDaysPerWeek(e.target.value)}
-              fullWidth
-              label="Days Per Week"
-              variant="outlined"
-              type="number"
-            /> */}
               <FormControl fullWidth>
                 <InputLabel variant="standard" htmlFor="uncontrolled-native">
                   Days Per Week
@@ -176,14 +150,10 @@ function UserPage() {
               </Typography>
             </Grid>
             <Grid item xs={12}>
-              {/* TODO: configure datagrid to correspond w each day */}
-              <DataGrid
-                rows={dataGridRows}
-                columns={columns}
-                pageSize={3}
-                rowsPerPageOptions={[3]}
-                checkboxSelection
-              />
+            {/* TODO: custom data grid*/}
+          <Stack direction="row" justifyContent="space-evenly" useFlexGap>
+            <TaskGrid />
+      </Stack>
             </Grid>
           </>
         )}
@@ -211,6 +181,54 @@ const CalendarSection = () => {
       <CalendarRow day={"Sat"} />
       <CalendarRow day={"Sun"} />
     </Stack>
+  );
+};
+
+const TaskGrid = () => {
+  const dispatch = useDispatch();
+  const tasks = useSelector((store) => store.tasks);
+  return (
+    <Grid item xs={10}>
+      {/* headers */}
+      <Stack direction="row" justifyContent="space-between" useFlexGap>
+        <Typography variant="h5" component="h5">
+          Y/N
+        </Typography>
+        <Typography variant="h5" component="h5">
+          Task Name
+        </Typography>
+        <Box paddingRight={3}>
+          <Typography variant="h5" component="h5">
+            DPW
+          </Typography>
+        </Box>
+      </Stack>
+      <Grid item xs={10}>
+        {tasks?.map((task, i) => (
+          <Stack direction="row" justifyContent="space-between" useFlexGap>
+            <>
+              {/* onClick={() => dispatch({ type: 'TOGGLE_TASK', payload: task })} */}
+              <Checkbox />
+              <Typography
+                sx={{
+                  whiteSpace: "nowrap",
+                  overflow: "hidden",
+                  textOverflow: "ellipsis",
+                  maxWidth: "33vw",
+                }}
+                variant="h5"
+                component="h5"
+              >
+                {task.name}
+              </Typography>
+              <Typography variant="h5" component="h5">
+                {task.days_per_week}
+              </Typography>
+            </>
+          </Stack>
+        ))}
+      </Grid>
+    </Grid>
   );
 };
 
