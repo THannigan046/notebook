@@ -21,7 +21,7 @@ router.post('/tasks/:id',(req, res) => {
 
   const userId = req.params.id;
 
-  const queryText = `INSERT INTO "tasks" (name, days_per_week, user_id) VALUES ($1, $2, $3) RETURNING id`;
+  const queryText = `INSERT INTO "tasks" (name, days_per_week, user_id) VALUES ($1, $2, $3) RETURNING *`;
 
   pool.query(queryText, [taskName, daysPerWeek, userId])
   .then((result) => {

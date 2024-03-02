@@ -39,7 +39,10 @@ function UserPage() {
     axios.post(`/api/user/tasks/${user.id}`, {
       taskName: taskName,
       daysPerWeek: daysPerWeek,
-    });
+    }).then((response) => {
+      dispatch({ type: "SET_TASKS", payload: response.data });
+      console.log('post successful', response.data);
+    })
 
     handleClose();
   };
@@ -62,7 +65,7 @@ function UserPage() {
     { field: "name", headerName: "Task Name", minWidth: 150, flex: 0.6 },
     {
       field: "daysPerWeek",
-      headerName: "Days Per Week",
+      headerName: "DPW",
       minWidth: 150,
       flex: 0.6,
     },
